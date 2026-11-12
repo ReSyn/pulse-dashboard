@@ -1,14 +1,15 @@
 const STORAGE_KEY = "pulse-dashboard-v1";
 const today = new Date();
 const dateKey = (d = new Date()) => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
-const habits = [
-  "Eat regular, balanced meals",
-  "Drink water throughout the day",
-  "Enjoy movement or take planned rest",
-  "Get 8–10 hours of sleep",
-  "Take time to relax",
-  "Listen to my body's recovery needs"
-];
+const dailyTasks = {
+  Monday: ["Shower", "Drink water regularly", "Eat breakfast", "Sports session", "Eat lunch", "Eat dinner", "Get ready for bed"],
+  Tuesday: ["Shower", "Drink water regularly", "Eat breakfast", "Workout A", "Eat lunch", "Eat dinner", "Get ready for bed"],
+  Wednesday: ["Shower", "Drink water regularly", "Eat breakfast", "Sports session", "Eat lunch", "Eat dinner", "Get ready for bed"],
+  Thursday: ["Shower", "Drink water regularly", "Eat breakfast", "Recovery walk or gentle stretching", "Eat lunch", "Eat dinner", "Get ready for bed"],
+  Friday: ["Shower", "Drink water regularly", "Eat breakfast", "Workout B", "Eat lunch", "Eat dinner", "Get ready for bed"],
+  Saturday: ["Shower", "Drink water regularly", "Eat breakfast", "Sports session", "Eat lunch", "Eat dinner", "Get ready for bed"],
+  Sunday: ["Shower", "Drink water regularly", "Eat breakfast", "Rest and recover", "Eat lunch", "Eat dinner", "Get ready for bed"]
+};
 const schedule = [
   {day:"Monday",type:"Sport",detail:"Your regular 2-hour sports session",symbol:"●"},
   {day:"Tuesday",type:"Strength",detail:"Workout A · Full body · about 25–30 min",symbol:"◆"},
@@ -57,13 +58,14 @@ function setTodayHabits(values){if(!state.habitsByDate)state.habitsByDate={};sta
 function showToast(message){const el=document.getElementById("toast");el.textContent=message;el.classList.add("show");clearTimeout(showToast.timer);showToast.timer=setTimeout(()=>el.classList.remove("show"),2200);}
 function switchTab(name){document.querySelectorAll(".tab").forEach(b=>b.classList.toggle("active",b.dataset.tab===name));document.querySelectorAll(".view").forEach(v=>v.classList.toggle("active",v.id===`view-${name}`));window.scrollTo({top:0,behavior:"smooth"});}
 function renderHabits(){
-  const done=getTodayHabits();const container=document.getElementById("today-habits");
-  container.innerHTML=habits.map((h,i)=>`<label class="check-row"><input type="checkbox" data-habit="${i}" ${done.includes(i)?"checked":""}><span>${h}</span></label>`).join("");
-  document.getElementById("habit-count").textContent=`${done.length}/${habits.length}`;
-  document.getElementById("habit-progress").style.width=`${done.length/habits.length*100}%`;
+  const day=getDayName();const tasks=dailyTasks[day];const done=getTodayHabits();const container=document.getElementById("today-habits");
+  document.querySelector(".habit-panel .panel-top h3").textContent=`${day}'s checklist`;
+  container.innerHTML=tasks.map(task=>`<label class="check-row"><input type="checkbox" data-habit="${task}" ${done.includes(task)?"checked":""}><span>${task}</span></label>`).join("");
+  document.getElementById("habit-count").textContent=`${done.length}/${tasks.length}`;
+  document.getElementById("habit-progress").style.width=`${done.length/tasks.length*100}%`;
   container.querySelectorAll("input").forEach(input=>input.addEventListener("change",()=>{
-    let updated=getTodayHabits().slice();const i=Number(input.dataset.habit);
-    updated=input.checked?[...new Set([...updated,i])]:updated.filter(x=>x!==i);
+    const task=input.dataset.habit;let updated=getTodayHabits().slice();
+    updated=input.checked?[...new Set([...updated,task])]:updated.filter(x=>x!==task);
     setTodayHabits(updated);renderHabits();
   }));
 }
@@ -91,7 +93,7 @@ function renderProgress(){
   document.getElementById("phase-list").innerHTML=phases.map(p=>`<article class="phase-item ${phase===p?"current":""}"><span>${p.range}</span><strong>${p.title}</strong><p>${p.description}</p></article>`).join("");
 }
 function renderToday(){
-  const day=getDayName();const item=schedule.find(x=>x.day===day);
+  const today=new Date();const day=getDayName(today);const item=schedule.find(x=>x.day===day);
   document.getElementById("today-date").textContent=today.toLocaleDateString(undefined,{weekday:"short",month:"short",day:"numeric"});
   document.getElementById("today-heading").textContent=`Good ${today.getHours()<12?"morning":today.getHours()<18?"afternoon":"evening"}`;
   document.getElementById("today-activity").textContent=item?item.type:"Your day";
