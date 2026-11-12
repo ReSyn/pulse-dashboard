@@ -1,0 +1,117 @@
+const STORAGE_KEY = "pulse-dashboard-v1";
+const today = new Date();
+const dateKey = (d = new Date()) => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+const habits = [
+  "Eat regular, balanced meals",
+  "Drink water throughout the day",
+  "Enjoy movement or take planned rest",
+  "Get 8–10 hours of sleep",
+  "Take time to relax",
+  "Listen to my body's recovery needs"
+];
+const schedule = [
+  {day:"Monday",type:"Sport",detail:"Your regular 2-hour sports session",symbol:"●"},
+  {day:"Tuesday",type:"Strength",detail:"Workout A · Full body · about 25–30 min",symbol:"◆"},
+  {day:"Wednesday",type:"Sport",detail:"Your regular 2-hour sports session",symbol:"●"},
+  {day:"Thursday",type:"Recovery",detail:"Gentle walking or relaxed stretching",symbol:"○"},
+  {day:"Friday",type:"Strength",detail:"Workout B · Strength and core · about 25–30 min",symbol:"◆"},
+  {day:"Saturday",type:"Sport",detail:"Your regular 2-hour sports session",symbol:"●"},
+  {day:"Sunday",type:"Rest",detail:"A full recovery day",symbol:"○"}
+];
+const workouts = {
+  A:{title:"Workout A · Full body",kicker:"TUESDAY · FULL BODY",exercises:[
+    ["Squats","3 × 12 repetitions","Stand with feet about shoulder-width apart. Send your hips back, bend your knees, then stand up with control."],
+    ["Push-ups","3 × 6–12 repetitions","Place hands a little wider than shoulders. Keep your body in a straight line, lower with control and push up. Use knee or wall push-ups if needed."],
+    ["Reverse lunges","2 × 10 each leg","Step one foot backwards, bend both knees comfortably, then push through the front foot to return."],
+    ["Plank","3 × 20–30 seconds","Rest on your forearms and toes, keeping your body in a comfortable straight line. Breathe normally."],
+    ["Calf raises","2 × 15 repetitions","Stand tall, lift your heels, pause briefly, then lower slowly."]
+  ]},
+  B:{title:"Workout B · Strength and core",kicker:"FRIDAY · STRENGTH & CORE",exercises:[
+    ["Split squats","2 × 10 each leg","Stand with one foot in front of the other. Bend both knees, lower with control, then stand. Hold a wall lightly for balance if needed."],
+    ["Close-grip push-ups","2 × 6–10 repetitions","Place hands slightly closer than shoulder-width. Keep elbows comfortably near your sides. Use regular or knee push-ups if needed."],
+    ["Glute bridges","2 × 15 repetitions","Lie on your back with knees bent and feet on the floor. Lift hips gently, then lower with control."],
+    ["Dead bugs","2 × 10 each side","Lie on your back with arms raised and knees bent. Slowly extend the opposite arm and leg, then switch sides. Keep your back steady."],
+    ["Mountain climbers","2 × 20 alternating steps","Start in a high plank. Bring one knee forward, return it, then alternate. Keep the movement controlled."]
+  ]}
+};
+const phases = [
+  {range:"WEEKS 1–2",start:1,end:2,title:"Learn the movements",description:"Practise each exercise with controlled technique. Start with fewer sets if needed and establish a comfortable weekly routine."},
+  {range:"WEEKS 3–4",start:3,end:4,title:"Build consistency",description:"Get familiar with the schedule and complete the planned sessions when you're feeling recovered. Technique comes before repetitions."},
+  {range:"WEEKS 5–8",start:5,end:8,title:"Develop strength",description:"If the workouts feel comfortable and recovery is good, gradually add a repetition here and there. Don't increase every exercise at once."},
+  {range:"WEEKS 9–12",start:9,end:12,title:"Maintain progress",description:"Keep movements controlled, notice improvements in coordination and sports skills, and maintain good recovery habits."}
+];
+const meals = [
+  ["BREAKFAST","Eggs, baladi bread or toast, milk and fruit."],
+  ["LUNCH","Chicken, fish, meat or beans with rice, pasta or potatoes and salad."],
+  ["SNACK","Fruit, nuts, milk or a peanut-butter sandwich. Add a snack when hungry."],
+  ["DINNER","Eggs, chicken, beans or cheese with bread or potatoes and vegetables."]
+];
+function loadState(){
+  try{return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};}catch{return {};}
+}
+let state = loadState();
+function saveState(){localStorage.setItem(STORAGE_KEY,JSON.stringify(state));}
+function getDayName(d=new Date()){return ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"][d.getDay()];}
+function getTodayHabits(){const key=dateKey();if(!state.habitsByDate)state.habitsByDate={};if(!state.habitsByDate[key])state.habitsByDate[key]=[];return state.habitsByDate[key];}
+function setTodayHabits(values){if(!state.habitsByDate)state.habitsByDate={};state.habitsByDate[dateKey()]=values;saveState();}
+function showToast(message){const el=document.getElementById("toast");el.textContent=message;el.classList.add("show");clearTimeout(showToast.timer);showToast.timer=setTimeout(()=>el.classList.remove("show"),2200);}
+function switchTab(name){document.querySelectorAll(".tab").forEach(b=>b.classList.toggle("active",b.dataset.tab===name));document.querySelectorAll(".view").forEach(v=>v.classList.toggle("active",v.id===`view-${name}`));window.scrollTo({top:0,behavior:"smooth"});}
+function renderHabits(){
+  const done=getTodayHabits();const container=document.getElementById("today-habits");
+  container.innerHTML=habits.map((h,i)=>`<label class="check-row"><input type="checkbox" data-habit="${i}" ${done.includes(i)?"checked":""}><span>${h}</span></label>`).join("");
+  document.getElementById("habit-count").textContent=`${done.length}/${habits.length}`;
+  document.getElementById("habit-progress").style.width=`${done.length/habits.length*100}%`;
+  container.querySelectorAll("input").forEach(input=>input.addEventListener("change",()=>{
+    let updated=getTodayHabits().slice();const i=Number(input.dataset.habit);
+    updated=input.checked?[...new Set([...updated,i])]:updated.filter(x=>x!==i);
+    setTodayHabits(updated);renderHabits();
+  }));
+}
+function renderSchedule(){
+  const html=schedule.map(item=>`<article class="schedule-card"><div class="schedule-icon" aria-hidden="true">${item.symbol}</div><div><strong>${item.day}</strong><small>${item.detail}</small></div><span class="tag ${item.type.toLowerCase()}">${item.type}</span></article>`).join("");
+  document.getElementById("weekly-plan").innerHTML=html;
+  document.getElementById("week-strip").innerHTML=schedule.map(item=>`<div class="day-card ${item.type.toLowerCase()}"><strong>${item.day.slice(0,3)}</strong><span>${item.type}</span><i class="day-dot"></i></div>`).join("");
+}
+function renderWorkout(which="A"){
+  const workout=workouts[which];
+  document.getElementById("workout-kicker").textContent=workout.kicker;
+  document.getElementById("workout-title").textContent=workout.title;
+  document.getElementById("exercise-list").innerHTML=workout.exercises.map((e,i)=>`<article class="exercise-card"><span class="exercise-number">${String(i+1).padStart(2,"0")}</span><div><h3>${e[0]}</h3><span class="sets">${e[1]}</span><p>${e[2]}</p></div></article>`).join("");
+  document.querySelectorAll(".segment").forEach(b=>b.classList.toggle("active",b.dataset.workout===which));
+}
+function renderMeals(){document.getElementById("meal-list").innerHTML=meals.map(m=>`<article class="meal-card"><span class="meal-time">${m[0]}</span><h3>${m[0][0]+m[0].slice(1).toLowerCase()}</h3><p>${m[1]}</p></article>`).join("");}
+function renderProgress(){
+  const week=Number(state.currentWeek||1);const slider=document.getElementById("week-slider");slider.value=week;
+  document.getElementById("week-number").textContent=`WEEK ${week} OF 12`;
+  document.getElementById("week-big").innerHTML=`${String(week).padStart(2,"0")}<span>/12</span>`;
+  const phase=phases.find(p=>week>=p.start&&week<=p.end);
+  document.getElementById("phase-range").textContent=phase.range;
+  document.getElementById("phase-title").textContent=phase.title;
+  document.getElementById("phase-description").textContent=phase.description;
+  document.getElementById("phase-list").innerHTML=phases.map(p=>`<article class="phase-item ${phase===p?"current":""}"><span>${p.range}</span><strong>${p.title}</strong><p>${p.description}</p></article>`).join("");
+}
+function renderToday(){
+  const day=getDayName();const item=schedule.find(x=>x.day===day);
+  document.getElementById("today-date").textContent=today.toLocaleDateString(undefined,{weekday:"short",month:"short",day:"numeric"});
+  document.getElementById("today-heading").textContent=`Good ${today.getHours()<12?"morning":today.getHours()<18?"afternoon":"evening"}`;
+  document.getElementById("today-activity").textContent=item?item.type:"Your day";
+  document.getElementById("today-description").textContent=item?item.detail:"Take today at your own pace.";
+  const action=document.getElementById("today-action");
+  action.textContent=item?.type==="Strength"?"Open today's workout":"View weekly plan";
+  action.onclick=()=>{if(item?.type==="Strength"){renderWorkout(day==="Tuesday"?"A":"B");switchTab("workouts");}else switchTab("plan");};
+}
+document.querySelectorAll(".tab").forEach(b=>b.addEventListener("click",()=>switchTab(b.dataset.tab)));
+document.querySelectorAll("[data-go]").forEach(b=>b.addEventListener("click",()=>switchTab(b.dataset.go)));
+document.querySelectorAll(".segment").forEach(b=>b.addEventListener("click",()=>renderWorkout(b.dataset.workout)));
+document.getElementById("reset-habits").addEventListener("click",()=>{setTodayHabits([]);renderHabits();showToast("Today's checklist was reset.");});
+document.getElementById("week-slider").addEventListener("input",e=>{state.currentWeek=Number(e.target.value);saveState();renderProgress();});
+document.getElementById("theme-toggle").addEventListener("click",()=>{document.body.classList.toggle("light-mode");state.lightMode=document.body.classList.contains("light-mode");saveState();});
+document.getElementById("export-data").addEventListener("click",()=>{
+  const blob=new Blob([JSON.stringify(state,null,2)],{type:"application/json"});
+  const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download="pulse-progress-backup.json";a.click();URL.revokeObjectURL(url);showToast("Progress backup downloaded.");
+});
+function updateConnection(){const el=document.getElementById("connection-status");el.textContent=navigator.onLine?"● Online":"● Offline";el.classList.toggle("offline",!navigator.onLine);}
+window.addEventListener("online",updateConnection);window.addEventListener("offline",updateConnection);
+if(state.lightMode)document.body.classList.add("light-mode");
+renderToday();renderHabits();renderSchedule();renderWorkout("A");renderMeals();renderProgress();updateConnection();
+if("serviceWorker" in navigator && location.protocol.startsWith("http"))window.addEventListener("load",()=>navigator.serviceWorker.register("./service-worker.js").catch(()=>{}));
