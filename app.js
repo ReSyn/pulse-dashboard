@@ -61,6 +61,7 @@ function setTodayHabits(values){if(!state.habitsByDate)state.habitsByDate={};sta
 function showToast(message,type="success"){const el=document.getElementById("toast");el.textContent=message;el.classList.toggle("toast-error",type==="error");el.classList.add("show");clearTimeout(showToast.timer);showToast.timer=setTimeout(()=>el.classList.remove("show","toast-error"),2600);}
 function closeMobileMenu(){const nav=document.getElementById("main-tabs"),toggle=document.getElementById("menu-toggle");nav.classList.remove("menu-open");toggle.setAttribute("aria-expanded","false");toggle.setAttribute("aria-label","Open navigation menu");}
 function switchTab(name){
+ if(!document.getElementById("view-"+name)||!document.querySelector('.tab[data-tab="'+name+'"]')){showToast("That section isn't available.","error");return;}
  document.querySelectorAll(".tab").forEach(b=>{const active=b.dataset.tab===name;b.classList.toggle("active",active);if(active)b.setAttribute("aria-current","page");else b.removeAttribute("aria-current");});
  document.querySelectorAll(".view").forEach(v=>v.classList.toggle("active",v.id==="view-"+name));
  const titles={today:"Today",plan:"Weekly plan",workouts:"Workouts",nutrition:"Nutrition",hydration:"Hydration",progress:"12 weeks"};
