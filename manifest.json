@@ -1,6 +1,6 @@
 {
-  "name": "PULSEA",
-  "short_name": "PULSEA",
+  "name": "PULSE",
+  "short_name": "PULSE",
   "description": "Your personal fitness, hydration and healthy-habits dashboard.",
   "start_url": "./",
   "scope": "./",
@@ -8,6 +8,11 @@
   "background_color": "#f4f7fa",
   "theme_color": "#101d2b",
   "icons": [
-    {"src":"icons/pulsea.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}
+    {
+      "src": "icons/pulse.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
   ]
 }
