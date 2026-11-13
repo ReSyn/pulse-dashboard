@@ -4,21 +4,21 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#101d2b">
-  <meta name="description" content="PULSEA — your personal fitness, hydration and healthy-habits dashboard.">
+  <meta name="description" content="PULSE — your personal fitness, hydration and healthy-habits dashboard.">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="PULSEA">
-  <link rel="icon" href="icons/pulsea.svg" type="image/svg+xml">
+  <meta name="apple-mobile-web-app-title" content="PULSE">
+  <link rel="icon" href="icons/pulse.svg" type="image/svg+xml">
   <link rel="manifest" href="manifest.json">
   <link rel="stylesheet" href="styles.css">
-  <title>PULSEA</title>
+  <title>PULSE</title>
 </head>
 <body>
   <div class="app-shell">
     <header class="topbar">
       <a class="brand" href="#" aria-label="PULSE home">
         <span class="brand-mark" aria-hidden="true">ϟ</span>
-        <span><strong>PULSEA</strong></span>
+        <span><strong>PULSE</strong></span>
       </a>
       <div class="topbar-right">
         <span class="offline-indicator" id="connection-status">● Online</span>
@@ -119,6 +119,7 @@
       <section class="view" id="view-hydration">
 <div class="section-heading"><div><p class="eyebrow">WATER · RECOVERY · DAILY CHECK-IN</p><h2>Hydration & recovery</h2></div></div>
 <p class="muted intro">Keep an easy record of what you drink and check in with how you're feeling. This is a guide, not a target or a competition.</p>
+<article class="panel water-guide"><div><span class="eyebrow">DAILY WATER REFERENCE</span><h3>About 1.6–1.8 L of drinks</h3><p>For ages 9–13, this is a general daily estimate for beverages (including water and milk). Food adds some water too. It’s not a personal target or a pass/fail goal.</p><small>Hot weather and sports can increase what you need. Sip regularly and listen to thirst.</small></div><span class="guide-icon" aria-hidden="true">💧</span></article>
 <div class="hydration-grid">
 <article class="panel water-panel"><div class="panel-top"><span class="eyebrow">TODAY'S WATER LOG</span><span class="water-drop" aria-hidden="true">◆</span></div>
 <div class="water-total"><strong id="water-total">0</strong><span>ml logged today</span></div><p class="muted water-note" id="water-summary">Start by logging a glass whenever you have one.</p>
@@ -138,6 +139,17 @@
 <article class="tip-card"><span>02</span><div><strong>Sports and hot weather</strong><p>Drink before and after activity, and take water breaks during longer sessions or in the heat.</p></div></article>
 <article class="tip-card"><span>03</span><div><strong>Listen to your body</strong><p>Thirst is a useful cue. Needs vary with weather, activity and the person, so don't force a fixed amount.</p></div></article>
 <article class="tip-card"><span>04</span><div><strong>Food helps too</strong><p>Fruit, vegetables, soups and other foods also contribute to hydration.</p></div></article></div>
+<div class="section-heading compact"><div><p class="eyebrow">TAKE A QUICK BREAK</p><h2>Hydration mini-quiz</h2></div></div>
+<article class="panel quiz-panel" id="hydration-quiz">
+  <div class="quiz-top"><span class="eyebrow" id="quiz-progress">QUESTION 1 OF 3</span><span class="quiz-score" id="quiz-score">0 correct</span></div>
+  <h3 id="quiz-question">Do fruit and soup contribute to your daily water intake?</h3>
+  <div class="quiz-answers" id="quiz-answers">
+    <button class="quiz-answer" data-answer="0" type="button">Yes, they do</button>
+    <button class="quiz-answer" data-answer="1" type="button">No, only drinks count</button>
+  </div>
+  <p class="quiz-feedback" id="quiz-feedback" aria-live="polite">Pick an answer to see why.</p>
+  <button class="button button-secondary quiz-next" id="quiz-next" type="button" disabled>Next question</button>
+</article>
 <aside class="notice"><strong>Keep it balanced</strong><p>Water is a great everyday choice. You don't need to track every sip, and sports drinks aren't usually necessary for ordinary daily activity. If you feel unwell or unusually thirsty often, talk with a parent or healthcare professional.</p></aside>
 </section>
 
@@ -155,7 +167,7 @@
       </section>
     </main>
 
-    <footer><span class="brand-mini">PULSEA</span><span>Your pace. Your progress.</span><button class="text-button" id="export-data" type="button">Export my data</button></footer>
+    <footer><span class="brand-mini">PULSE</span><span>Your pace. Your progress.</span><button class="text-button" id="export-data" type="button">Export my data</button></footer>
   </div>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <script src="app.js" defer></script>
