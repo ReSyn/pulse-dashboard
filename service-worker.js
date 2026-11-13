@@ -1,7 +1,8 @@
-const CACHE_NAME = "pulse-static-v7";
+const CACHE_NAME = "pulse-static-v8";
 const APP_SHELL = [
   "./",
-  "./index.html",\n  "./404.html",
+  "./index.html",
+  "./404.html",
   "./styles.css",
   "./app.js",
   "./manifest.json",
