@@ -84,30 +84,36 @@ function renderWorkout(which="A"){
 function renderMeals(){document.getElementById("meal-list").innerHTML=meals.map(m=>`<article class="meal-card"><span class="meal-time">${m[0]}</span><h3>${m[0][0]+m[0].slice(1).toLowerCase()}</h3><p>${m[1]}</p></article>`).join("");}
 
 
-const hydrationQuestions=[
- {q:"Do fruit and soup contribute to your daily water intake?",a:["Yes, they do","No, only drinks count"],correct:0,why:"Yes. Water-rich foods such as fruit and soup contribute to your total water intake."},
- {q:"If you forgot to drink earlier, should you gulp down lots of water at once?",a:["Yes, catch up all at once","No, sip regularly"],correct:1,why:"Sipping regularly through the day is more comfortable than trying to catch up all at once."},
- {q:"Can hot weather and sports change how much you need to drink?",a:["Yes, they can","No, the amount is always fixed"],correct:0,why:"Yes. Heat and activity can increase fluid needs, so take water breaks and pay attention to thirst."}
-];
-let quizIndex=0,quizScore=0,quizAnswered=false;
+const hydrationQuestionBank=[{"q":"Do fruit and soup contribute to your daily water intake?","a":["Yes, they do","No, only drinks count"],"correct":0,"why":"Water-rich foods like fruit and soup contribute to your total water intake."},{"q":"If you forgot to drink earlier, what's a sensible approach?","a":["Gulp lots down at once","Sip regularly through the day"],"correct":1,"why":"Regular sips are more comfortable than trying to catch up all at once."},{"q":"Can hot weather and sports change how much you need to drink?","a":["Yes, they can","No, needs never change"],"correct":0,"why":"Heat and activity can increase fluid needs. Take water breaks and listen to thirst."},{"q":"Which is a good everyday drink choice?","a":["Water","Energy drinks"],"correct":0,"why":"Water is a great everyday choice. Energy drinks aren't needed for hydration."},{"q":"Does milk contribute to hydration?","a":["Yes","No"],"correct":0,"why":"Milk contains water and contributes to daily fluid intake."},{"q":"When is a useful time to drink water?","a":["Only at bedtime","At regular points during the day"],"correct":1,"why":"Having drinks with meals and taking sips during the day is a simple routine."},{"q":"What can be a sign you may need a drink?","a":["Feeling thirsty","Having a favourite colour"],"correct":0,"why":"Thirst is one of the body's signals to get a drink."},{"q":"Do you need to force yourself to finish a fixed amount of water?","a":["Yes, no matter what","No, needs vary"],"correct":1,"why":"Fluid needs vary with weather, activity, food and the individual. A number is a guide, not a rule."},{"q":"Which snack can also provide water?","a":["Cucumber slices","Plain crackers only"],"correct":0,"why":"Cucumber has a high water content and contributes to hydration."},{"q":"What is a practical way to remember drinks at school?","a":["Keep a water bottle handy","Avoid drinking until you get home"],"correct":0,"why":"Having a bottle available makes it easier to take sips when you have a break."},{"q":"Can drinking too much water very quickly be a problem?","a":["Yes","No, more is always better"],"correct":0,"why":"Drinking excessive amounts quickly can be harmful. Drink normally across the day."},{"q":"Do vegetables contain water?","a":["Yes, many do","No, vegetables are dry"],"correct":0,"why":"Many vegetables, such as lettuce and cucumber, contain lots of water."},{"q":"What might make you need extra drinks on a hot day?","a":["Sweating more","Reading a book"],"correct":0,"why":"Sweating helps cool the body and means you lose fluid that needs replacing."},{"q":"Are sports drinks necessary for every ordinary workout?","a":["Yes, always","Usually not for everyday activity"],"correct":1,"why":"For ordinary activity, water and regular meals are generally enough."},{"q":"Which habit can help you stay hydrated?","a":["Drink with meals","Ignore thirst all day"],"correct":0,"why":"Having a drink with meals is an easy habit to build."},{"q":"Does tea or soup count as fluid?","a":["Yes, they contribute","No, only plain water counts"],"correct":0,"why":"Other drinks and water-rich foods also contribute to fluid intake."},{"q":"What should you do if you feel thirsty during sports?","a":["Take a water break","Keep going and ignore it"],"correct":0,"why":"Take a break and drink. It's sensible to respond to thirst during activity."},{"q":"Is everyone's daily water need exactly the same?","a":["Yes, identical for everyone","No, it varies"],"correct":1,"why":"Needs vary with age, activity, weather, health and other factors."},{"q":"Which is a good clue that you're drinking enough over the day?","a":["You rarely feel thirsty and urine is usually pale yellow","You never need a bathroom break"],"correct":0,"why":"Thirst and generally pale-yellow urine can be useful everyday clues, though neither is perfect on its own."},{"q":"What is the best approach to hydration?","a":["Make it a relaxed daily habit","Treat it like a competition"],"correct":0,"why":"Hydration should support how you feel, not become a score or competition."}];
+let hydrationQuestions=[],quizIndex=0,quizScore=0,quizAnswered=false;
+function startHydrationQuiz(){
+ hydrationQuestions=hydrationQuestionBank.map((q)=>({...q,sort:Math.random()})).sort((a,b)=>a.sort-b.sort).slice(0,3);
+ quizIndex=0;quizScore=0;quizAnswered=false;renderHydrationQuiz();
+}
 function renderHydrationQuiz(){
- const q=hydrationQuestions[quizIndex];
  const progress=document.getElementById("quiz-progress"),question=document.getElementById("quiz-question"),answers=document.getElementById("quiz-answers"),feedback=document.getElementById("quiz-feedback"),next=document.getElementById("quiz-next"),score=document.getElementById("quiz-score");
- if(quizIndex>=hydrationQuestions.length){progress.textContent="QUIZ COMPLETE";question.textContent="You finished the hydration quiz.";answers.innerHTML="";feedback.textContent="You got "+quizScore+" out of "+hydrationQuestions.length+" correct. Nice work.";next.textContent="Play again";next.disabled=false;score.textContent=quizScore+" correct";return;}
- progress.textContent="QUESTION "+(quizIndex+1)+" OF "+hydrationQuestions.length;question.textContent=q.q;score.textContent=quizScore+" correct";quizAnswered=false;feedback.textContent="Pick an answer to see why.";next.textContent=quizIndex===hydrationQuestions.length-1?"See results":"Next question";next.disabled=true;
+ if(quizIndex>=hydrationQuestions.length){progress.textContent="ROUND COMPLETE";question.textContent=quizScore===3?"Perfect round!":"Round complete!";answers.innerHTML="";feedback.textContent="You got "+quizScore+" out of 3 correct. "+(quizScore===3?"Flawless!":"Ready for another round?");next.textContent="Play again";next.disabled=false;score.textContent=quizScore+"/3";document.getElementById("quiz-panel").classList.add("quiz-complete");return;}
+ const q=hydrationQuestions[quizIndex];document.getElementById("quiz-panel").classList.remove("quiz-complete");
+ progress.textContent="QUESTION "+(quizIndex+1)+" OF 3";question.textContent=q.q;score.textContent=quizScore+"/3";quizAnswered=false;feedback.textContent="Pick an answer to see why.";next.textContent=quizIndex===2?"See results":"Next question";next.disabled=true;
  answers.innerHTML=q.a.map((answer,i)=>'<button class="quiz-answer" data-answer="'+i+'" type="button">'+answer+'</button>').join("");
+}
+function launchConfetti(){
+ if(window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches)return;
+ const layer=document.getElementById("confetti-layer");if(!layer)return;
+ const shapes=["","circle","square"];
+ for(let i=0;i<34;i++){const piece=document.createElement("i");piece.className="confetti-piece "+shapes[i%3];piece.style.left=(8+Math.random()*84)+"%";piece.style.setProperty("--drift",((Math.random()-.5)*170)+"px");piece.style.setProperty("--spin",(Math.random()*720-360)+"deg");piece.style.animationDelay=(Math.random()*.18)+"s";piece.style.background=["#8fe0ba","#e6b44f","#78b9e8","#d98568","#a99ae8"][i%5];layer.appendChild(piece);setTimeout(()=>piece.remove(),1550);}
 }
 document.getElementById("quiz-answers").addEventListener("click",e=>{
  const button=e.target.closest("[data-answer]");if(!button||quizAnswered||quizIndex>=hydrationQuestions.length)return;
  const q=hydrationQuestions[quizIndex],chosen=Number(button.dataset.answer);quizAnswered=true;
- if(chosen===q.correct)quizScore++;
+ if(chosen===q.correct){quizScore++;launchConfetti();document.getElementById("quiz-panel").classList.add("answer-correct");setTimeout(()=>document.getElementById("quiz-panel").classList.remove("answer-correct"),520);}
  document.querySelectorAll(".quiz-answer").forEach((b,i)=>{b.disabled=true;if(i===q.correct)b.classList.add("correct");else if(i===chosen)b.classList.add("incorrect");});
- document.getElementById("quiz-feedback").textContent=(chosen===q.correct?"Correct! ":"Not quite. ")+q.why;
- document.getElementById("quiz-score").textContent=quizScore+" correct";document.getElementById("quiz-next").disabled=false;
+ document.getElementById("quiz-feedback").textContent=(chosen===q.correct?"Correct! ✨ ":"Not quite. ")+q.why;
+ document.getElementById("quiz-score").textContent=quizScore+"/3";document.getElementById("quiz-next").disabled=false;
 });
 document.getElementById("quiz-next").addEventListener("click",()=>{
- if(quizIndex>=hydrationQuestions.length){quizIndex=0;quizScore=0;}else quizIndex++;
- renderHydrationQuiz();
+ if(quizIndex>=hydrationQuestions.length){startHydrationQuiz();return;}
+ quizIndex++;renderHydrationQuiz();
 });
 
 function getTodayWater(){if(!state.waterByDate)state.waterByDate={};const key=dateKey();if(!Array.isArray(state.waterByDate[key]))state.waterByDate[key]=[];return state.waterByDate[key];}
@@ -166,5 +172,5 @@ document.getElementById("export-data").addEventListener("click",()=>{
 function updateConnection(){const el=document.getElementById("connection-status");el.textContent=navigator.onLine?"● Online":"● Offline";el.classList.toggle("offline",!navigator.onLine);}
 window.addEventListener("online",updateConnection);window.addEventListener("offline",updateConnection);
 if(state.lightMode)document.body.classList.add("light-mode");
-renderToday();renderHabits();renderSchedule();renderWorkout("A");renderMeals();renderHydration();renderHydrationQuiz();renderProgress();updateConnection();
+renderToday();renderHabits();renderSchedule();renderWorkout("A");renderMeals();renderHydration();startHydrationQuiz();renderProgress();updateConnection();
 if("serviceWorker" in navigator && location.protocol.startsWith("http"))window.addEventListener("load",()=>navigator.serviceWorker.register("./service-worker.js").catch(()=>{}));
