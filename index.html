@@ -124,7 +124,23 @@
 <article class="panel water-guide"><div><span class="eyebrow">DAILY WATER REFERENCE</span><h3>About 1.6–1.8 L of drinks</h3><p>For ages 9–13, this is a general daily estimate for beverages (including water and milk). Food adds some water too. It’s not a personal target or a pass/fail goal.</p><small>Hot weather and sports can increase what you need. Sip regularly and listen to thirst.</small></div><span class="guide-icon" aria-hidden="true">💧</span></article>
 <div class="hydration-grid">
 <article class="panel water-panel"><div class="panel-top"><span class="eyebrow">TODAY'S WATER LOG</span><span class="water-drop" aria-hidden="true">◆</span></div>
-<div class="water-total"><strong id="water-total">0</strong><span>ml logged today</span></div><p class="muted water-note" id="water-summary">Start by logging a glass whenever you have one.</p>
+<div class="water-progress-wrap">
+  <div class="water-ring" id="water-ring" role="img" aria-label="0 millilitres logged out of a 1,800 millilitre daily reference">
+    <svg viewBox="0 0 180 180" aria-hidden="true">
+      <circle class="water-ring-track" cx="90" cy="90" r="74"></circle>
+      <circle class="water-ring-fill" id="water-ring-fill" cx="90" cy="90" r="74"></circle>
+    </svg>
+    <div class="water-ring-center">
+      <span class="water-ring-icon" aria-hidden="true">💧</span>
+      <strong id="water-total">0</strong>
+      <span>of 1,800 ml</span>
+    </div>
+  </div>
+  <div class="water-ring-caption">
+    <strong id="water-progress-label">0% of daily reference</strong>
+    <p class="muted water-note" id="water-summary">Log a drink to see your progress.</p>
+  </div>
+</div>
 <div class="water-actions"><button class="button button-primary" id="add-water-glass" type="button">＋ 250 ml glass</button><button class="button button-secondary" id="add-water-bottle" type="button">＋ 500 ml</button></div>
 <div class="water-custom"><label for="custom-water">Other amount (ml)</label><div><input id="custom-water" type="number" min="1" max="2000" step="50" inputmode="numeric"><button class="button button-secondary" id="add-custom-water" type="button">Add</button></div></div>
 <div class="water-footer"><button class="text-button" id="undo-water" type="button">Undo last entry</button><button class="text-button" id="reset-water" type="button">Clear today's log</button></div>
