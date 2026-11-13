@@ -82,6 +82,23 @@ function renderWorkout(which="A"){
   document.querySelectorAll(".segment").forEach(b=>b.classList.toggle("active",b.dataset.workout===which));
 }
 function renderMeals(){document.getElementById("meal-list").innerHTML=meals.map(m=>`<article class="meal-card"><span class="meal-time">${m[0]}</span><h3>${m[0][0]+m[0].slice(1).toLowerCase()}</h3><p>${m[1]}</p></article>`).join("");}
+
+function getTodayWater(){if(!state.waterByDate)state.waterByDate={};const key=dateKey();if(!Array.isArray(state.waterByDate[key]))state.waterByDate[key]=[];return state.waterByDate[key];}
+function setTodayWater(entries){if(!state.waterByDate)state.waterByDate={};state.waterByDate[dateKey()]=entries;saveState();}
+function renderHydration(){
+ const entries=getTodayWater();const total=entries.reduce((sum,n)=>sum+n,0);
+ document.getElementById("water-total").textContent=total.toLocaleString();
+ document.getElementById("water-summary").textContent=total===0?"Start by logging a glass whenever you have one.":"You've logged "+entries.length+" drink"+(entries.length===1?"":"s")+" today. Nice job keeping track.";
+ document.getElementById("undo-water").disabled=entries.length===0;document.getElementById("reset-water").disabled=entries.length===0;
+ const feeling=state.energyByDate&&state.energyByDate[dateKey()];
+ document.querySelectorAll(".energy-option").forEach(button=>{button.classList.toggle("selected",button.dataset.energy===feeling);button.setAttribute("aria-pressed",String(button.dataset.energy===feeling));});
+ document.getElementById("energy-feedback").textContent=feeling==="Good"?"You've marked today as a good-energy day.":feeling==="Okay"?"You've marked today as an okay day. Keep your pace comfortable.":feeling==="Need rest"?"Rest is productive too. It's okay to make today easier.":"Your check-in stays on this device.";
+}
+function addWater(amount){
+ if(!Number.isFinite(amount)||amount<1||amount>2000){showToast("Enter an amount between 1 and 2,000 ml.");return;}
+ setTodayWater([...getTodayWater(),Math.round(amount)]);document.getElementById("custom-water").value="";renderHydration();showToast(Math.round(amount)+" ml added to today's log.");
+}
+
 function renderProgress(){
   const week=Number(state.currentWeek||1);const slider=document.getElementById("week-slider");slider.value=week;
   document.getElementById("week-number").textContent=`WEEK ${week} OF 12`;
@@ -106,6 +123,13 @@ document.querySelectorAll(".tab").forEach(b=>b.addEventListener("click",()=>swit
 document.querySelectorAll("[data-go]").forEach(b=>b.addEventListener("click",()=>switchTab(b.dataset.go)));
 document.querySelectorAll(".segment").forEach(b=>b.addEventListener("click",()=>renderWorkout(b.dataset.workout)));
 document.getElementById("reset-habits").addEventListener("click",()=>{setTodayHabits([]);renderHabits();showToast("Today's checklist was reset.");});
+document.getElementById("add-water-glass").addEventListener("click",()=>addWater(250));
+document.getElementById("add-water-bottle").addEventListener("click",()=>addWater(500));
+document.getElementById("add-custom-water").addEventListener("click",()=>addWater(Number(document.getElementById("custom-water").value)));
+document.getElementById("custom-water").addEventListener("keydown",e=>{if(e.key==="Enter")addWater(Number(e.currentTarget.value));});
+document.getElementById("undo-water").addEventListener("click",()=>{const entries=getTodayWater().slice();entries.pop();setTodayWater(entries);renderHydration();showToast("Last water entry removed.");});
+document.getElementById("reset-water").addEventListener("click",()=>{setTodayWater([]);renderHydration();showToast("Today's water log cleared.");});
+document.querySelectorAll(".energy-option").forEach(button=>button.addEventListener("click",()=>{if(!state.energyByDate)state.energyByDate={};state.energyByDate[dateKey()]=button.dataset.energy;saveState();renderHydration();showToast("Recovery check-in saved.");}));
 document.getElementById("week-slider").addEventListener("input",e=>{state.currentWeek=Number(e.target.value);saveState();renderProgress();});
 document.getElementById("theme-toggle").addEventListener("click",()=>{document.body.classList.toggle("light-mode");state.lightMode=document.body.classList.contains("light-mode");saveState();});
 document.getElementById("export-data").addEventListener("click",()=>{
@@ -115,5 +139,5 @@ document.getElementById("export-data").addEventListener("click",()=>{
 function updateConnection(){const el=document.getElementById("connection-status");el.textContent=navigator.onLine?"● Online":"● Offline";el.classList.toggle("offline",!navigator.onLine);}
 window.addEventListener("online",updateConnection);window.addEventListener("offline",updateConnection);
 if(state.lightMode)document.body.classList.add("light-mode");
-renderToday();renderHabits();renderSchedule();renderWorkout("A");renderMeals();renderProgress();updateConnection();
+renderToday();renderHabits();renderSchedule();renderWorkout("A");renderMeals();renderHydration();renderProgress();updateConnection();
 if("serviceWorker" in navigator && location.protocol.startsWith("http"))window.addEventListener("load",()=>navigator.serviceWorker.register("./service-worker.js").catch(()=>{}));
