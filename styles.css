@@ -53,3 +53,22 @@ body.light-mode .button-secondary{background:#f1f4f6;color:#26394a}body.light-mo
 .quiz-feedback{font-size:12px;color:var(--muted);min-height:18px;margin:13px 0 4px}
 .quiz-next{margin-top:5px}
 @media(max-width:600px){.water-guide{align-items:flex-start;padding:17px}.water-guide h3{font-size:19px}.quiz-answers{display:grid}.quiz-answer{text-align:left}}
+
+/* Quiz game feel, hover feedback and lightweight celebrations */
+.quiz-panel{position:relative;overflow:hidden;transition:border-color .2s,box-shadow .2s,transform .2s}
+.quiz-panel.answer-correct{border-color:#8fe0ba;box-shadow:0 0 0 3px rgba(143,224,186,.2),var(--shadow);transform:translateY(-2px)}
+.quiz-panel.quiz-complete{background:linear-gradient(135deg,#fff 0%,#f0faf5 100%)}
+.quiz-answer{transition:background .16s ease,border-color .16s ease,color .16s ease,transform .16s ease,box-shadow .16s ease}
+.quiz-answer:hover:not(:disabled){background:#e6ebef;border-color:#cbd4dc;color:#26394a;transform:translateY(-2px);box-shadow:0 4px 10px rgba(16,29,43,.07)}
+.quiz-answer:active:not(:disabled){transform:scale(.98)}
+.quiz-answer.correct{background:#e2f5ea;border-color:#69bd91;color:#216b4c;box-shadow:0 0 0 2px rgba(105,189,145,.13)}
+.quiz-answer.incorrect{background:#f8eae6;border-color:#d99b88;color:#98543f}
+.quiz-answer:disabled{cursor:default;opacity:1}
+.quiz-next:not(:disabled):hover{background:#dce4e9;transform:translateY(-1px)}
+button:hover:not(:disabled){filter:brightness(.94) saturate(.72)}
+.confetti-layer{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:100}
+.confetti-piece{position:absolute;top:38%;width:8px;height:12px;border-radius:2px;opacity:0;animation:confetti-pop 1.35s cubic-bezier(.15,.7,.3,1) forwards}
+.confetti-piece.circle{border-radius:50%;width:9px;height:9px}
+.confetti-piece.square{width:7px;height:7px}
+@keyframes confetti-pop{0%{opacity:0;transform:translate3d(0,0,0) rotate(0) scale(.5)}12%{opacity:1}100%{opacity:0;transform:translate3d(var(--drift),65vh,0) rotate(var(--spin)) scale(.8)}}
+@media(prefers-reduced-motion:reduce){.confetti-piece{display:none}.quiz-panel,.quiz-answer{transition:none}}
