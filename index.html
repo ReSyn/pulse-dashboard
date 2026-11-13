@@ -4,22 +4,21 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#101d2b">
-  <meta name="description" content="PULSE — your personal 12-week fitness and healthy-habits dashboard.">
+  <meta name="description" content="PULSEA — your personal fitness, hydration and healthy-habits dashboard.">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="PULSE">
-  <link rel="icon" href="icons/pulse.svg" type="image/svg+xml">
-  <link rel="apple-touch-icon" href="icons/pulse-192.png">
+  <meta name="apple-mobile-web-app-title" content="PULSEA">
+  <link rel="icon" href="icons/pulsea.svg" type="image/svg+xml">
   <link rel="manifest" href="manifest.json">
   <link rel="stylesheet" href="styles.css">
-  <title>PULSE — Personal Fitness Dashboard</title>
+  <title>PULSEA</title>
 </head>
 <body>
   <div class="app-shell">
     <header class="topbar">
       <a class="brand" href="#" aria-label="PULSE home">
-        <span class="brand-mark" aria-hidden="true">↗</span>
-        <span><strong>PULSE</strong><small>PERSONAL FITNESS</small></span>
+        <span class="brand-mark" aria-hidden="true">ϟ</span>
+        <span><strong>PULSEA</strong></span>
       </a>
       <div class="topbar-right">
         <span class="offline-indicator" id="connection-status">● Online</span>
@@ -45,6 +44,7 @@
       <button class="tab" data-tab="plan" type="button">Weekly plan</button>
       <button class="tab" data-tab="workouts" type="button">Workouts</button>
       <button class="tab" data-tab="nutrition" type="button">Nutrition</button>
+      <button class="tab" data-tab="hydration" type="button">Hydration</button>
       <button class="tab" data-tab="progress" type="button">12 weeks</button>
     </nav>
 
@@ -116,7 +116,32 @@
         <aside class="notice"><strong>Everyday reminders</strong><p>Eat regular meals, include carbohydrates, enjoy a variety of foods, drink water regularly and have extra snacks when hungry — especially on sport days. No calorie caps, fasting or cutting out food groups.</p></aside>
       </section>
 
-      <section class="view" id="view-progress">
+      <section class="view" id="view-hydration">
+<div class="section-heading"><div><p class="eyebrow">WATER · RECOVERY · DAILY CHECK-IN</p><h2>Hydration & recovery</h2></div></div>
+<p class="muted intro">Keep an easy record of what you drink and check in with how you're feeling. This is a guide, not a target or a competition.</p>
+<div class="hydration-grid">
+<article class="panel water-panel"><div class="panel-top"><span class="eyebrow">TODAY'S WATER LOG</span><span class="water-drop" aria-hidden="true">◆</span></div>
+<div class="water-total"><strong id="water-total">0</strong><span>ml logged today</span></div><p class="muted water-note" id="water-summary">Start by logging a glass whenever you have one.</p>
+<div class="water-actions"><button class="button button-primary" id="add-water-glass" type="button">＋ 250 ml glass</button><button class="button button-secondary" id="add-water-bottle" type="button">＋ 500 ml</button></div>
+<div class="water-custom"><label for="custom-water">Other amount (ml)</label><div><input id="custom-water" type="number" min="1" max="2000" step="50" inputmode="numeric" placeholder="e.g. 350"><button class="button button-secondary" id="add-custom-water" type="button">Add</button></div></div>
+<div class="water-footer"><button class="text-button" id="undo-water" type="button">Undo last entry</button><button class="text-button" id="reset-water" type="button">Clear today's log</button></div>
+<p class="fine-print">The log is optional. You don't need to hit a fixed number or force water when you're not thirsty.</p></article>
+<article class="panel recovery-panel"><span class="eyebrow">QUICK RECOVERY CHECK-IN</span><h3>How are you feeling today?</h3><p class="muted">Use this to decide whether to follow your plan as usual or take things easier.</p>
+<div class="energy-options" role="group" aria-label="How are you feeling today?">
+<button class="energy-option" data-energy="Good" type="button"><span>⚡</span><strong>Good</strong><small>Feeling ready</small></button>
+<button class="energy-option" data-energy="Okay" type="button"><span>◉</span><strong>Okay</strong><small>Take it steady</small></button>
+<button class="energy-option" data-energy="Need rest" type="button"><span>☾</span><strong>Need rest</strong><small>Recovery first</small></button></div>
+<p class="energy-feedback" id="energy-feedback" aria-live="polite">Your check-in stays on this device.</p></article></div>
+<div class="section-heading compact"><div><p class="eyebrow">SMALL HABITS THAT HELP</p><h2>Hydration basics</h2></div></div>
+<div class="hydration-tips">
+<article class="tip-card"><span>01</span><div><strong>Keep water nearby</strong><p>Have a drink with meals and snacks, and sip regularly through the day.</p></div></article>
+<article class="tip-card"><span>02</span><div><strong>Sports and hot weather</strong><p>Drink before and after activity, and take water breaks during longer sessions or in the heat.</p></div></article>
+<article class="tip-card"><span>03</span><div><strong>Listen to your body</strong><p>Thirst is a useful cue. Needs vary with weather, activity and the person, so don't force a fixed amount.</p></div></article>
+<article class="tip-card"><span>04</span><div><strong>Food helps too</strong><p>Fruit, vegetables, soups and other foods also contribute to hydration.</p></div></article></div>
+<aside class="notice"><strong>Keep it balanced</strong><p>Water is a great everyday choice. You don't need to track every sip, and sports drinks aren't usually necessary for ordinary daily activity. If you feel unwell or unusually thirsty often, talk with a parent or healthcare professional.</p></aside>
+</section>
+
+<section class="view" id="view-progress">
         <div class="section-heading"><div><p class="eyebrow">YOUR JOURNEY</p><h2>12-week programme</h2></div></div>
         <article class="panel week-picker">
           <div class="panel-top"><span class="eyebrow">CURRENT WEEK</span><strong id="week-number">WEEK 1 OF 12</strong></div>
@@ -130,7 +155,7 @@
       </section>
     </main>
 
-    <footer><span class="brand-mini">PULSE</span><span>Your pace. Your progress.</span><button class="text-button" id="export-data" type="button">Export my data</button></footer>
+    <footer><span class="brand-mini">PULSEA</span><span>Your pace. Your progress.</span><button class="text-button" id="export-data" type="button">Export my data</button></footer>
   </div>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <script src="app.js" defer></script>
