@@ -17,11 +17,12 @@
   <div id="confetti-layer" class="confetti-layer" aria-hidden="true"></div>
   <div class="app-shell">
     <header class="topbar">
-      <a class="brand" href="#" aria-label="PULSE home">
+      <a class="brand" href="./" id="home-logo" aria-label="PULSE home">
         <span class="brand-mark" aria-hidden="true">ϟ</span>
         <span><strong>PULSE</strong></span>
       </a>
       <div class="topbar-right">
+        <button class="menu-toggle" id="menu-toggle" type="button" aria-expanded="false" aria-controls="main-tabs" aria-label="Open navigation menu"><span></span><span></span><span></span></button>
         <span class="offline-indicator" id="connection-status">● Online</span>
         <button class="icon-button" id="theme-toggle" type="button" aria-label="Toggle color theme" title="Toggle theme">◐</button>
       </div>
@@ -40,7 +41,7 @@
       </div>
     </section>
 
-    <nav class="tabs" aria-label="Main navigation">
+    <nav class="tabs" id="main-tabs" aria-label="Main navigation">
       <button class="tab active" data-tab="today" type="button">Today</button>
       <button class="tab" data-tab="plan" type="button">Weekly plan</button>
       <button class="tab" data-tab="workouts" type="button">Workouts</button>
@@ -125,7 +126,7 @@
 <article class="panel water-panel"><div class="panel-top"><span class="eyebrow">TODAY'S WATER LOG</span><span class="water-drop" aria-hidden="true">◆</span></div>
 <div class="water-total"><strong id="water-total">0</strong><span>ml logged today</span></div><p class="muted water-note" id="water-summary">Start by logging a glass whenever you have one.</p>
 <div class="water-actions"><button class="button button-primary" id="add-water-glass" type="button">＋ 250 ml glass</button><button class="button button-secondary" id="add-water-bottle" type="button">＋ 500 ml</button></div>
-<div class="water-custom"><label for="custom-water">Other amount (ml)</label><div><input id="custom-water" type="number" min="1" max="2000" step="50" inputmode="numeric" placeholder="e.g. 350"><button class="button button-secondary" id="add-custom-water" type="button">Add</button></div></div>
+<div class="water-custom"><label for="custom-water">Other amount (ml)</label><div><input id="custom-water" type="number" min="1" max="2000" step="50" inputmode="numeric"><button class="button button-secondary" id="add-custom-water" type="button">Add</button></div></div>
 <div class="water-footer"><button class="text-button" id="undo-water" type="button">Undo last entry</button><button class="text-button" id="reset-water" type="button">Clear today's log</button></div>
 <p class="fine-print">The log is optional. You don't need to hit a fixed number or force water when you're not thirsty.</p></article>
 <article class="panel recovery-panel"><span class="eyebrow">QUICK RECOVERY CHECK-IN</span><h3>How are you feeling today?</h3><p class="muted">Use this to decide whether to follow your plan as usual or take things easier.</p>
@@ -168,7 +169,7 @@
       </section>
     </main>
 
-    <footer><span class="brand-mini">PULSE</span><span>Your pace. Your progress.</span><button class="text-button" id="export-data" type="button">Export my data</button></footer>
+    <footer><a class="brand-mini footer-home" href="./" aria-label="PULSE home">PULSE</a><span>Your pace. Your progress.</span><nav class="footer-links" aria-label="Footer navigation"><button class="text-button" data-go="today" type="button">Today</button><button class="text-button" data-go="plan" type="button">Weekly plan</button><button class="text-button" data-go="hydration" type="button">Hydration</button></nav><span class="copyright">© <span id="copyright-year"></span> PULSE</span><button class="text-button" id="export-data" type="button">Export my data</button></footer>
   </div>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <script src="app.js" defer></script>
