@@ -1,24 +1,13 @@
 {
   "name": "PULSE \u2014 Personal Fitness Dashboard",
-  "short_name": "PULSE",
-  "description": "A personal 12-week fitness and healthy-habits dashboard.",
+  "short_name": "PULSEA",
+  "description": "Your personal fitness, hydration and healthy-habits dashboard.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "background_color": "#f4f7fa",
   "theme_color": "#101d2b",
   "icons": [
-    {
-      "src": "icons/pulse-192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "icons/pulse-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any"
-    }
+    {"src":"icons/pulsea.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}
   ]
 }
