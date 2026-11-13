@@ -1,11 +1,11 @@
-const CACHE_NAME = "pulse-static-v3";
+const CACHE_NAME = "pulse-static-v4";
 const APP_SHELL = [
   "./",
   "./index.html",
   "./styles.css",
   "./app.js",
   "./manifest.json",
-  "./icons/pulsea.svg"
+  "./icons/pulse.svg"
 ];
 self.addEventListener("install", event => {
   event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(APP_SHELL)));
