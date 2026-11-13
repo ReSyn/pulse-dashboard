@@ -51,11 +51,14 @@ function loadState(){
   try{return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};}catch{return {};}
 }
 let state = loadState();
-function saveState(){localStorage.setItem(STORAGE_KEY,JSON.stringify(state));}
+function saveState(){
+  try{localStorage.setItem(STORAGE_KEY,JSON.stringify(state));return true;}
+  catch(error){showToast("Couldn't save your changes on this device. Check browser storage settings.","error");return false;}
+}
 function getDayName(d=new Date()){return ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"][d.getDay()];}
 function getTodayHabits(){const key=dateKey();if(!state.habitsByDate)state.habitsByDate={};if(!state.habitsByDate[key])state.habitsByDate[key]=[];return state.habitsByDate[key];}
 function setTodayHabits(values){if(!state.habitsByDate)state.habitsByDate={};state.habitsByDate[dateKey()]=values;saveState();}
-function showToast(message){const el=document.getElementById("toast");el.textContent=message;el.classList.add("show");clearTimeout(showToast.timer);showToast.timer=setTimeout(()=>el.classList.remove("show"),2200);}
+function showToast(message,type="success"){const el=document.getElementById("toast");el.textContent=message;el.classList.toggle("toast-error",type==="error");el.classList.add("show");clearTimeout(showToast.timer);showToast.timer=setTimeout(()=>el.classList.remove("show","toast-error"),2600);}
 function closeMobileMenu(){const nav=document.getElementById("main-tabs"),toggle=document.getElementById("menu-toggle");nav.classList.remove("menu-open");toggle.setAttribute("aria-expanded","false");toggle.setAttribute("aria-label","Open navigation menu");}
 function switchTab(name){
  document.querySelectorAll(".tab").forEach(b=>{const active=b.dataset.tab===name;b.classList.toggle("active",active);if(active)b.setAttribute("aria-current","page");else b.removeAttribute("aria-current");});
@@ -164,6 +167,8 @@ document.getElementById("menu-toggle").addEventListener("click",()=>{const nav=d
 document.getElementById("home-logo").addEventListener("click",event=>{event.preventDefault();switchTab("today");});
 document.querySelector(".footer-home").addEventListener("click",event=>{event.preventDefault();switchTab("today");});
 document.addEventListener("keydown",event=>{if(event.key==="Escape")closeMobileMenu();});
+document.addEventListener("click",event=>{if(!event.target.closest("#main-tabs, #menu-toggle"))closeMobileMenu();});
+window.addEventListener("resize",()=>{if(window.innerWidth>760)closeMobileMenu();});
 document.getElementById("copyright-year").textContent=new Date().getFullYear();
 document.querySelectorAll("[data-go]").forEach(b=>b.addEventListener("click",()=>switchTab(b.dataset.go)));
 document.querySelectorAll(".segment").forEach(b=>b.addEventListener("click",()=>renderWorkout(b.dataset.workout)));
