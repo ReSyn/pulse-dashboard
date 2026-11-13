@@ -83,6 +83,33 @@ function renderWorkout(which="A"){
 }
 function renderMeals(){document.getElementById("meal-list").innerHTML=meals.map(m=>`<article class="meal-card"><span class="meal-time">${m[0]}</span><h3>${m[0][0]+m[0].slice(1).toLowerCase()}</h3><p>${m[1]}</p></article>`).join("");}
 
+
+const hydrationQuestions=[
+ {q:"Do fruit and soup contribute to your daily water intake?",a:["Yes, they do","No, only drinks count"],correct:0,why:"Yes. Water-rich foods such as fruit and soup contribute to your total water intake."},
+ {q:"If you forgot to drink earlier, should you gulp down lots of water at once?",a:["Yes, catch up all at once","No, sip regularly"],correct:1,why:"Sipping regularly through the day is more comfortable than trying to catch up all at once."},
+ {q:"Can hot weather and sports change how much you need to drink?",a:["Yes, they can","No, the amount is always fixed"],correct:0,why:"Yes. Heat and activity can increase fluid needs, so take water breaks and pay attention to thirst."}
+];
+let quizIndex=0,quizScore=0,quizAnswered=false;
+function renderHydrationQuiz(){
+ const q=hydrationQuestions[quizIndex];
+ const progress=document.getElementById("quiz-progress"),question=document.getElementById("quiz-question"),answers=document.getElementById("quiz-answers"),feedback=document.getElementById("quiz-feedback"),next=document.getElementById("quiz-next"),score=document.getElementById("quiz-score");
+ if(quizIndex>=hydrationQuestions.length){progress.textContent="QUIZ COMPLETE";question.textContent="You finished the hydration quiz.";answers.innerHTML="";feedback.textContent="You got "+quizScore+" out of "+hydrationQuestions.length+" correct. Nice work.";next.textContent="Play again";next.disabled=false;score.textContent=quizScore+" correct";return;}
+ progress.textContent="QUESTION "+(quizIndex+1)+" OF "+hydrationQuestions.length;question.textContent=q.q;score.textContent=quizScore+" correct";quizAnswered=false;feedback.textContent="Pick an answer to see why.";next.textContent=quizIndex===hydrationQuestions.length-1?"See results":"Next question";next.disabled=true;
+ answers.innerHTML=q.a.map((answer,i)=>'<button class="quiz-answer" data-answer="'+i+'" type="button">'+answer+'</button>').join("");
+}
+document.getElementById("quiz-answers").addEventListener("click",e=>{
+ const button=e.target.closest("[data-answer]");if(!button||quizAnswered||quizIndex>=hydrationQuestions.length)return;
+ const q=hydrationQuestions[quizIndex],chosen=Number(button.dataset.answer);quizAnswered=true;
+ if(chosen===q.correct)quizScore++;
+ document.querySelectorAll(".quiz-answer").forEach((b,i)=>{b.disabled=true;if(i===q.correct)b.classList.add("correct");else if(i===chosen)b.classList.add("incorrect");});
+ document.getElementById("quiz-feedback").textContent=(chosen===q.correct?"Correct! ":"Not quite. ")+q.why;
+ document.getElementById("quiz-score").textContent=quizScore+" correct";document.getElementById("quiz-next").disabled=false;
+});
+document.getElementById("quiz-next").addEventListener("click",()=>{
+ if(quizIndex>=hydrationQuestions.length){quizIndex=0;quizScore=0;}else quizIndex++;
+ renderHydrationQuiz();
+});
+
 function getTodayWater(){if(!state.waterByDate)state.waterByDate={};const key=dateKey();if(!Array.isArray(state.waterByDate[key]))state.waterByDate[key]=[];return state.waterByDate[key];}
 function setTodayWater(entries){if(!state.waterByDate)state.waterByDate={};state.waterByDate[dateKey()]=entries;saveState();}
 function renderHydration(){
@@ -139,5 +166,5 @@ document.getElementById("export-data").addEventListener("click",()=>{
 function updateConnection(){const el=document.getElementById("connection-status");el.textContent=navigator.onLine?"● Online":"● Offline";el.classList.toggle("offline",!navigator.onLine);}
 window.addEventListener("online",updateConnection);window.addEventListener("offline",updateConnection);
 if(state.lightMode)document.body.classList.add("light-mode");
-renderToday();renderHabits();renderSchedule();renderWorkout("A");renderMeals();renderHydration();renderProgress();updateConnection();
+renderToday();renderHabits();renderSchedule();renderWorkout("A");renderMeals();renderHydration();renderHydrationQuiz();renderProgress();updateConnection();
 if("serviceWorker" in navigator && location.protocol.startsWith("http"))window.addEventListener("load",()=>navigator.serviceWorker.register("./service-worker.js").catch(()=>{}));
