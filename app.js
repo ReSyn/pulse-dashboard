@@ -56,7 +56,14 @@ function getDayName(d=new Date()){return ["Sunday","Monday","Tuesday","Wednesday
 function getTodayHabits(){const key=dateKey();if(!state.habitsByDate)state.habitsByDate={};if(!state.habitsByDate[key])state.habitsByDate[key]=[];return state.habitsByDate[key];}
 function setTodayHabits(values){if(!state.habitsByDate)state.habitsByDate={};state.habitsByDate[dateKey()]=values;saveState();}
 function showToast(message){const el=document.getElementById("toast");el.textContent=message;el.classList.add("show");clearTimeout(showToast.timer);showToast.timer=setTimeout(()=>el.classList.remove("show"),2200);}
-function switchTab(name){document.querySelectorAll(".tab").forEach(b=>b.classList.toggle("active",b.dataset.tab===name));document.querySelectorAll(".view").forEach(v=>v.classList.toggle("active",v.id===`view-${name}`));window.scrollTo({top:0,behavior:"smooth"});}
+function closeMobileMenu(){const nav=document.getElementById("main-tabs"),toggle=document.getElementById("menu-toggle");nav.classList.remove("menu-open");toggle.setAttribute("aria-expanded","false");toggle.setAttribute("aria-label","Open navigation menu");}
+function switchTab(name){
+ document.querySelectorAll(".tab").forEach(b=>{const active=b.dataset.tab===name;b.classList.toggle("active",active);if(active)b.setAttribute("aria-current","page");else b.removeAttribute("aria-current");});
+ document.querySelectorAll(".view").forEach(v=>v.classList.toggle("active",v.id==="view-"+name));
+ const titles={today:"Today",plan:"Weekly plan",workouts:"Workouts",nutrition:"Nutrition",hydration:"Hydration",progress:"12 weeks"};
+ document.title=(titles[name]||"PULSE")+" | PULSE";closeMobileMenu();
+ window.scrollTo({top:0,behavior:window.matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"});
+}
 function renderHabits(){
   const day=getDayName();const tasks=dailyTasks[day];const done=getTodayHabits();const container=document.getElementById("today-habits");
   document.querySelector(".habit-panel .panel-top h3").textContent=`${day}'s checklist`;
@@ -153,6 +160,11 @@ function renderToday(){
   action.onclick=()=>{if(item?.type==="Strength"){renderWorkout(day==="Tuesday"?"A":"B");switchTab("workouts");}else switchTab("plan");};
 }
 document.querySelectorAll(".tab").forEach(b=>b.addEventListener("click",()=>switchTab(b.dataset.tab)));
+document.getElementById("menu-toggle").addEventListener("click",()=>{const nav=document.getElementById("main-tabs"),toggle=document.getElementById("menu-toggle"),open=!nav.classList.contains("menu-open");nav.classList.toggle("menu-open",open);toggle.setAttribute("aria-expanded",String(open));toggle.setAttribute("aria-label",open?"Close navigation menu":"Open navigation menu");});
+document.getElementById("home-logo").addEventListener("click",event=>{event.preventDefault();switchTab("today");});
+document.querySelector(".footer-home").addEventListener("click",event=>{event.preventDefault();switchTab("today");});
+document.addEventListener("keydown",event=>{if(event.key==="Escape")closeMobileMenu();});
+document.getElementById("copyright-year").textContent=new Date().getFullYear();
 document.querySelectorAll("[data-go]").forEach(b=>b.addEventListener("click",()=>switchTab(b.dataset.go)));
 document.querySelectorAll(".segment").forEach(b=>b.addEventListener("click",()=>renderWorkout(b.dataset.workout)));
 document.getElementById("reset-habits").addEventListener("click",()=>{setTodayHabits([]);renderHabits();showToast("Today's checklist was reset.");});
@@ -166,8 +178,8 @@ document.querySelectorAll(".energy-option").forEach(button=>button.addEventListe
 document.getElementById("week-slider").addEventListener("input",e=>{state.currentWeek=Number(e.target.value);saveState();renderProgress();});
 document.getElementById("theme-toggle").addEventListener("click",()=>{document.body.classList.toggle("light-mode");state.lightMode=document.body.classList.contains("light-mode");saveState();});
 document.getElementById("export-data").addEventListener("click",()=>{
-  const blob=new Blob([JSON.stringify(state,null,2)],{type:"application/json"});
-  const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download="pulse-progress-backup.json";a.click();URL.revokeObjectURL(url);showToast("Progress backup downloaded.");
+  try{const blob=new Blob([JSON.stringify(state,null,2)],{type:"application/json"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="pulse-progress-backup.json";document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);showToast("Your progress backup is ready.");}
+  catch(error){showToast("Export failed. Please try again.");}
 });
 function updateConnection(){const el=document.getElementById("connection-status");el.textContent=navigator.onLine?"● Online":"● Offline";el.classList.toggle("offline",!navigator.onLine);}
 window.addEventListener("online",updateConnection);window.addEventListener("offline",updateConnection);
