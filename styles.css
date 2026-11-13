@@ -35,3 +35,21 @@ button:disabled{opacity:.42;cursor:not-allowed}
 body.light-mode .button-secondary{background:#f1f4f6;color:#26394a}body.light-mode .water-custom input{background:#fff}
 @media(max-width:760px){.hydration-grid,.hydration-tips{grid-template-columns:1fr}.water-total strong{font-size:38px}.energy-options{gap:6px}.energy-option{padding:12px 3px}}
 @media(prefers-reduced-motion:reduce){button{transition:none}}
+
+/* PULSE hydration guide and mini-quiz */
+.water-guide{display:flex;align-items:center;justify-content:space-between;gap:18px;margin:-4px 0 16px;box-shadow:none;background:#f0f7f4;border-color:#dcebe4}
+.water-guide h3{font:800 22px Manrope;margin:4px 0 6px;color:var(--ink)}
+.water-guide p{font-size:12px;color:#526b60;margin:0 0 5px;max-width:650px}
+.water-guide small{font-size:10px;color:#698075}
+.guide-icon{display:grid;place-items:center;flex:0 0 52px;height:52px;border-radius:16px;background:#dcefe5;font-size:25px}
+.quiz-panel{box-shadow:none;margin-bottom:16px}
+.quiz-top{display:flex;justify-content:space-between;align-items:center}
+.quiz-score{font-size:11px;color:var(--green);font-weight:700}
+.quiz-panel h3{font:700 18px Manrope;margin:7px 0 15px}
+.quiz-answers{display:flex;gap:9px;flex-wrap:wrap}
+.quiz-answer{border:1px solid var(--line);border-radius:11px;background:#f8fafb;color:var(--ink);padding:11px 14px;font-size:12px;font-weight:600}
+.quiz-answer.correct{background:#e8f5ef;border-color:#7ac29d;color:#216b4c}
+.quiz-answer.incorrect{background:#fbefeb;border-color:#dca18e;color:#98543f}
+.quiz-feedback{font-size:12px;color:var(--muted);min-height:18px;margin:13px 0 4px}
+.quiz-next{margin-top:5px}
+@media(max-width:600px){.water-guide{align-items:flex-start;padding:17px}.water-guide h3{font-size:19px}.quiz-answers{display:grid}.quiz-answer{text-align:left}}
