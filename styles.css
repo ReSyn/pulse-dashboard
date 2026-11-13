@@ -4,3 +4,34 @@
 @media(max-width:760px){.app-shell{padding:0 16px}.hero{padding:27px 23px;display:block}.hero-stats{margin-top:22px}.hero-stats div{flex:1;min-width:0;padding:11px}.hero-stats strong{font-size:21px}.hero-stats span{font-size:8px}.today-grid{grid-template-columns:1fr}.week-strip{gap:5px}.day-card{padding:10px 3px}.day-card strong{font-size:10px}.day-card span{font-size:8px}.schedule-list,.exercise-list,.meal-grid,.phase-list{grid-template-columns:1fr}.plate-panel{grid-template-columns:1fr;justify-items:center}.plate-legend{width:100%}.fine-print{grid-column:auto}.section-heading h2{font-size:24px}.tabs{margin-left:-16px;margin-right:-16px;padding:0 12px}.tab{padding:12px 11px;font-size:11px}}
 @media(max-width:390px){.hero-stats{gap:6px}.hero-stats div{padding:9px 6px}.hero-stats strong{font-size:19px}.hero-stats span{font-size:7px}.offline-indicator{font-size:9px}}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
+
+/* PULSEA interaction and hydration additions */
+button{transition:transform .16s ease,background-color .16s ease,border-color .16s ease,box-shadow .16s ease,opacity .16s ease}
+button:hover:not(:disabled){filter:brightness(.97)}button:active:not(:disabled){transform:translateY(1px) scale(.985)}
+button:focus-visible,input:focus-visible{outline:3px solid rgba(35,151,107,.35);outline-offset:3px}
+button:disabled{opacity:.42;cursor:not-allowed}
+.tab,.segment,.button,.icon-button,.text-button,.energy-option{-webkit-tap-highlight-color:transparent}
+.button-primary:hover:not(:disabled){background:#a3ebca;box-shadow:0 5px 14px rgba(35,151,107,.15)}
+.button-secondary{background:#edf2f5;color:#26394a;border:1px solid #dfe7ed}.button-secondary:hover:not(:disabled){background:#e2eaef}
+.brand-mark{font-size:0;position:relative}.brand-mark:before{content:"";width:17px;height:26px;background:#8fe0ba;clip-path:polygon(57% 0,12% 55%,43% 55%,31% 100%,88% 39%,56% 39%);display:block}
+.brand strong{font-size:19px;letter-spacing:2.2px}
+.hydration-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:15px}.water-panel,.recovery-panel{box-shadow:none}
+.water-drop{display:grid;place-items:center;width:34px;height:34px;border-radius:11px;background:#eaf4f8;color:#4d9fc4;font-size:17px}
+.water-total{display:flex;align-items:baseline;gap:10px;margin:16px 0 0}.water-total strong{font:800 42px Manrope;letter-spacing:-2px;color:var(--ink)}.water-total span{font-size:12px;color:var(--muted)}
+.water-note{font-size:12px;margin:3px 0 17px}.water-actions{display:flex;gap:9px;flex-wrap:wrap}.water-actions .button{flex:1;min-width:130px}
+.water-custom{margin-top:18px}.water-custom label{display:block;font-size:11px;font-weight:700;margin-bottom:7px;color:#526274}
+.water-custom>div{display:flex;gap:8px}.water-custom input{width:100%;min-width:0;border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:#fbfcfd;color:var(--ink)}
+.water-footer{display:flex;justify-content:space-between;gap:12px;margin-top:12px}.water-footer button:disabled{opacity:.35}.water-panel .fine-print{display:block;margin-top:10px;line-height:1.5}
+.recovery-panel h3{font:700 20px Manrope;margin:8px 0}.recovery-panel>p.muted{font-size:12px}
+.energy-options{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:17px}
+.energy-option{display:flex;flex-direction:column;align-items:center;gap:4px;padding:13px 6px;border:1px solid var(--line);border-radius:13px;background:#fff;color:var(--ink)}
+.energy-option>span{font-size:20px;color:var(--green)}.energy-option strong{font-size:11px}.energy-option small{font-size:9px;color:var(--muted)}
+.energy-option.selected{border-color:#71bd98;background:#eff8f3;box-shadow:0 0 0 2px rgba(35,151,107,.08)}
+.energy-feedback{font-size:11px;color:var(--green);margin:13px 0 0;min-height:17px}
+.hydration-tips{display:grid;grid-template-columns:repeat(2,1fr);gap:11px}
+.tip-card{display:flex;gap:13px;align-items:flex-start;background:#fff;border:1px solid var(--line);border-radius:15px;padding:17px}
+.tip-card>span{font:700 12px Manrope;color:var(--green);background:#eaf5ef;border-radius:9px;padding:7px 8px}
+.tip-card strong{font-size:12px}.tip-card p{font-size:11px;color:var(--muted);margin:4px 0 0}
+body.light-mode .button-secondary{background:#f1f4f6;color:#26394a}body.light-mode .water-custom input{background:#fff}
+@media(max-width:760px){.hydration-grid,.hydration-tips{grid-template-columns:1fr}.water-total strong{font-size:38px}.energy-options{gap:6px}.energy-option{padding:12px 3px}}
+@media(prefers-reduced-motion:reduce){button{transition:none}}
