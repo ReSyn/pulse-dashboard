@@ -1,4 +1,4 @@
-const CACHE_NAME = "pulse-static-v4";
+const CACHE_NAME = "pulse-static-v5";
 const APP_SHELL = [
   "./",
   "./index.html",
