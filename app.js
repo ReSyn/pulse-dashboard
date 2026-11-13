@@ -131,8 +131,12 @@ function getTodayWater(){if(!state.waterByDate)state.waterByDate={};const key=da
 function setTodayWater(entries){if(!state.waterByDate)state.waterByDate={};state.waterByDate[dateKey()]=entries;saveState();}
 function renderHydration(){
  const entries=getTodayWater();const total=entries.reduce((sum,n)=>sum+n,0);
+ const reference=1800;const progress=Math.min(total/reference,1);const percent=Math.round(progress*100);
  document.getElementById("water-total").textContent=total.toLocaleString();
- document.getElementById("water-summary").textContent=total===0?"Start by logging a glass whenever you have one.":"You've logged "+entries.length+" drink"+(entries.length===1?"":"s")+" today. Nice job keeping track.";
+ document.getElementById("water-ring-fill").style.strokeDashoffset=String(464.96*(1-progress));
+ document.getElementById("water-ring").setAttribute("aria-label",total.toLocaleString()+" millilitres logged out of a 1,800 millilitre daily reference");
+ document.getElementById("water-progress-label").textContent=percent+"% of daily reference";
+ document.getElementById("water-summary").textContent=total===0?"Log a drink to see your progress.":total>=reference?"You've reached the 1.8 L reference. Keep listening to thirst and activity.":"You've logged "+entries.length+" drink"+(entries.length===1?"":"s")+" today. Keep sipping when you're thirsty.";
  document.getElementById("undo-water").disabled=entries.length===0;document.getElementById("reset-water").disabled=entries.length===0;
  const feeling=state.energyByDate&&state.energyByDate[dateKey()];
  document.querySelectorAll(".energy-option").forEach(button=>{button.classList.toggle("selected",button.dataset.energy===feeling);button.setAttribute("aria-pressed",String(button.dataset.energy===feeling));});
