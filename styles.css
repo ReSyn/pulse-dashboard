@@ -102,3 +102,30 @@ footer .text-button#export-data{margin-left:auto}
 }
 @media(max-width:420px){.app-shell{padding:0 12px}.hero{padding:23px 18px}.section-heading{gap:10px;align-items:flex-start}.date-pill{white-space:nowrap}.water-footer{flex-wrap:wrap}.copyright{font-size:9px}}
 @media(prefers-reduced-motion:reduce){.menu-toggle span{transition:none}}
+
+
+/* Final responsive and accessibility pass */
+.tabs{flex-wrap:wrap}
+.tab{white-space:normal}
+.today-grid>*,.hydration-grid>*,.meal-grid>*,.phase-list>*,.schedule-list>*,.exercise-list>*{min-width:0}
+.water-actions .button{min-width:min(130px,100%)}
+footer>*{min-width:0}
+footer .footer-links{flex-wrap:wrap}
+.toast.toast-error{background:#8f352f}
+@media(max-width:760px){
+  .tabs{flex-wrap:nowrap}
+  .tab{white-space:normal}
+  .water-actions{display:grid;grid-template-columns:1fr}
+  .water-actions .button{width:100%;min-width:0}
+  .water-custom>div{min-width:0}
+  .footer-links{gap:8px 12px}
+}
+@media(max-width:360px){
+  .app-shell{padding-left:10px;padding-right:10px}
+  .topbar-right{gap:6px}
+  .offline-indicator{font-size:8px}
+  .hero-stats div{min-width:0}
+  .section-heading h2{font-size:21px}
+  .panel{padding:16px}
+  .water-footer{gap:6px}
+}
